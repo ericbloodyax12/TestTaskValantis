@@ -1,14 +1,18 @@
 import {xAuth} from "./apiHelpers/xAuth";
-import {getItemsResponseType} from "./apiResponseTypes";
+import {
+  ActionType,
+  GetIdsPayloadParamType,
+  GetIdsResponseType,
+  GetItemsResponseType,
+  GetItiemsPayLoadParamType
+} from "./apiResponseTypes";
 
 
 export const productApi = {
   baseUrl: 'https://api.valantis.store:41000/',
-
   xAuth: xAuth,
 
-  getItems: async (): Promise<getItemsResponseType> => {
-    const action ='get_items'
+  baseRequest: async <T,P>(action:ActionType, params: P): Promise<T> => {
     const res = await fetch(productApi.baseUrl, {
       method: 'POST',
       headers: {
@@ -16,13 +20,24 @@ export const productApi = {
         'X-Auth': productApi.xAuth
       },
       body: JSON.stringify({
-        action: 'get_items',
-        params:  {"ids": ["1789ecf3-f81c-4f49-ada2-83804dcc74b0"]}
+        action: action,
+        params
       })
     })
-    const data = await res.json();
-    console.log(data)
-    return data;
-  }
+    const data = await res.json() as T
+    return data
+  },
+
+  getIds: async (): Promise<GetIdsResponseType> => {
+    const idsResponseData = await productApi.baseRequest<GetIdsResponseType,GetIdsPayloadParamType>('get_ids', {"offset": 0, "limit": 50})
+    return idsResponseData
+  },
+
+  getItems: async (): Promise<GetItemsResponseType> => {
+    const ids = await productApi.getIds()
+    const payloadParams = {ids: ids.result}
+    const itemsResponseData = await productApi.baseRequest<GetItemsResponseType,GetItiemsPayLoadParamType>('get_items',  payloadParams)
+    return itemsResponseData
+  },
 
 }
