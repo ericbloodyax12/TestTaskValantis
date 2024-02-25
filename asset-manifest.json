@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ericbloodyax12.github.io/TestTaskValantis/static/css/main.e6c13ad2.css",
+    "main.js": "/ericbloodyax12.github.io/TestTaskValantis/static/js/main.763d5f05.js",
+    "index.html": "/ericbloodyax12.github.io/TestTaskValantis/index.html",
+    "main.e6c13ad2.css.map": "/ericbloodyax12.github.io/TestTaskValantis/static/css/main.e6c13ad2.css.map",
+    "main.763d5f05.js.map": "/ericbloodyax12.github.io/TestTaskValantis/static/js/main.763d5f05.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.763d5f05.js"
+  ]
+}
