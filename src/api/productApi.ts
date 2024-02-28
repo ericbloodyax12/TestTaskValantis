@@ -15,6 +15,7 @@ class ProductApi {
   }
 
   async baseRequest<T, P>(action: ActionType, params: P): Promise<T> {
+    const actuallyParam = params ? {params: params} : {}
     const res = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -23,31 +24,31 @@ class ProductApi {
       },
       body: JSON.stringify({
         action: action,
-        params
+        ...actuallyParam
       })
     })
     const data = await res.json() as T
     return data
   }
 
-  async getIds(): Promise<GetIdsResponseType> {
+  async getIds(offsetParams: number): Promise<GetIdsResponseType> {
     const idsResponseData = await this.baseRequest<GetIdsResponseType, GetIdsPayloadParamType>(
-        'get_ids', {"offset": 0, "limit": 50}
+        'get_ids', {"offset": offsetParams, "limit": 50}
     )
     return idsResponseData
   }
 
-  async getItems(): Promise<GetItemsResponseType> {
-    const ids = await this.getIds()
+  async getItems(offsetParams: number): Promise<GetItemsResponseType> {
+    const ids = await this.getIds(offsetParams)
     const payloadParams = {ids: ids.result}
     const itemsResponseData = await this.baseRequest<GetItemsResponseType, GetItiemsPayLoadParamType>('get_items', payloadParams)
     console.log('itemsResponseData', itemsResponseData)
     return itemsResponseData
   }
 
-  async getFilter(): Promise<any> {
-
-  }
+  // async getFilter(): Promise<any> {
+  //   const fieldsResponseData = await this.baseRequest('filter',)
+  // }
 
 }
 

@@ -1,17 +1,21 @@
 import {useState} from "react";
-import {Column, DataGrid, Pager, Paging} from "devextreme-react/data-grid";
+import {Column, DataGrid, FilterRow, Pager, Paging} from "devextreme-react/data-grid";
 import CustomStore from "devextreme/data/custom_store";
 import {productApi} from "../../api/productApi";
-import {filterUniqueById} from "./helpers/filterUniqueById";
+import {filterUniqueById} from "../../api/apiHelpers/filterUniqueById";
+
 
 export const ProductList = () => {
-  const customStore = new CustomStore({
+  const customStore = new CustomStore({ //todo вынести
     key: 'id',
     loadMode: "processed",
     async load(loadOptions) {
-      const list = await productApi.getItems()
+      const offsetParams = loadOptions.skip
+      const filterParams = loadOptions.filter
+      console.log(filterParams)
+      const list = await productApi.getItems(offsetParams as number)
       const uniqueItemsList = filterUniqueById(list.result)
-      return {data: uniqueItemsList, totalCount: uniqueItemsList.length}
+      return {data: uniqueItemsList, totalCount: 8004}
     }
   })
   const [products, setProducts] = useState([])
@@ -19,14 +23,19 @@ export const ProductList = () => {
       <div>
         <DataGrid dataSource={customStore}
                   showBorders={true}
-                  remoteOperations={false}
+                  remoteOperations={{
+                    paging: true,
+                    filtering: true,
+                    sorting: false
+                  }}
                   height={400}
                   keyExpr={'id'}
         >
+          <FilterRow visible={true} showOperationChooser={false} />
           <Column dataField={'product'} caption={'Продукт'}/>
           <Column dataField={'price'} caption={'Цена'}/>
-          <Paging defaultPageSize={10} />
-          <Pager showPageSizeSelector={true} allowedPageSizes={[10]} />
+          <Paging defaultPageSize={50}/>
+          <Pager showPageSizeSelector={true} allowedPageSizes={[50]}/>
         </DataGrid>
 
       </div>
