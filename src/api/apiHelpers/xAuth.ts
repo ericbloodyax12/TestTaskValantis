@@ -1,15 +1,16 @@
 import  {Md5} from 'ts-md5';
 
-const password = 'Valantis'
-const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
+export const getXAuth = () => {
+  const password = 'Valantis'
+  const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
 // метод replace заменяет все вхождения символа дефиса ("-") в строке на пустую строку, тем самым удаляя все дефисы из строки
 // регулярка /-/g означает, что нужно заменить все вхождения дефиса, а флаг g (от "global") указывает на глобальный
 // поиск по всей строке
-const md5 = new Md5();
-md5.appendStr(password + '_' + timestamp)
-export const hash = md5.end();
-
-export const xAuth = `${hash}`
+  const md5 = new Md5();
+  md5.appendStr(password + '_' + timestamp)
+   const hash = md5.end();
+   return  `${hash}`
+}
 
 // const now = new Date();
 // const year = now.getUTCFullYear();

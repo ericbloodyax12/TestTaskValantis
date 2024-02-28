@@ -11,7 +11,6 @@ export const ProductList = () => {
     async load(loadOptions) {
       const list = await productApi.getItems()
       const uniqueItemsList = filterUniqueById(list.result)
-      console.log(uniqueItemsList)
       return {data: uniqueItemsList, totalCount: uniqueItemsList.length}
     }
   })
@@ -23,7 +22,6 @@ export const ProductList = () => {
                   remoteOperations={false}
                   height={400}
                   keyExpr={'id'}
-
         >
           <Column dataField={'product'} caption={'Продукт'}/>
           <Column dataField={'price'} caption={'Цена'}/>

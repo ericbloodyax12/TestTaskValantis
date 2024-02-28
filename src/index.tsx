@@ -4,8 +4,6 @@ import App from './App';
 import './index.css';
 import 'devextreme/dist/css/dx.light.css';
 
-
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

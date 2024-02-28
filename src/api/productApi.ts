@@ -1,23 +1,25 @@
-import {xAuth} from "./apiHelpers/xAuth";
+import {getXAuth} from "./apiHelpers/xAuth";
 import {
   ActionType,
   GetIdsPayloadParamType,
   GetIdsResponseType,
-  GetItemsResponseType,
+  GetItemsResponseType, GetItemsResponseTypeResult,
   GetItiemsPayLoadParamType
 } from "./apiResponseTypes";
 
 
-export const productApi = {
-  baseUrl: 'https://api.valantis.store:41000/',
-  xAuth: xAuth,
+class ProductApi {
+  baseUrl = 'https://api.valantis.store:41000/';
+  xAuth = getXAuth();
+  constructor() {
+  }
 
-  baseRequest: async <T,P>(action:ActionType, params: P): Promise<T> => {
-    const res = await fetch(productApi.baseUrl, {
+  async baseRequest<T, P>(action: ActionType, params: P): Promise<T> {
+    const res = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Auth': productApi.xAuth
+        'X-Auth': this.xAuth
       },
       body: JSON.stringify({
         action: action,
@@ -26,18 +28,27 @@ export const productApi = {
     })
     const data = await res.json() as T
     return data
-  },
+  }
 
-  getIds: async (): Promise<GetIdsResponseType> => {
-    const idsResponseData = await productApi.baseRequest<GetIdsResponseType,GetIdsPayloadParamType>('get_ids', {"offset": 0, "limit": 50})
+  async getIds(): Promise<GetIdsResponseType> {
+    const idsResponseData = await this.baseRequest<GetIdsResponseType, GetIdsPayloadParamType>(
+        'get_ids', {"offset": 0, "limit": 50}
+    )
     return idsResponseData
-  },
+  }
 
-  getItems: async (): Promise<GetItemsResponseType> => {
-    const ids = await productApi.getIds()
+  async getItems(): Promise<GetItemsResponseType> {
+    const ids = await this.getIds()
     const payloadParams = {ids: ids.result}
-    const itemsResponseData = await productApi.baseRequest<GetItemsResponseType,GetItiemsPayLoadParamType>('get_items',  payloadParams)
+    const itemsResponseData = await this.baseRequest<GetItemsResponseType, GetItiemsPayLoadParamType>('get_items', payloadParams)
+    console.log('itemsResponseData', itemsResponseData)
     return itemsResponseData
-  },
+  }
+
+  async getFilter(): Promise<any> {
+
+  }
 
 }
+
+export const productApi = new ProductApi();
