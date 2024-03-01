@@ -5,8 +5,6 @@ import {
   GetIdsResponseType,
   GetItemsResponseType,
   GetItemsPayLoadParamType,
-  GetFilterResponseType,
-  GetFilterRequestParams,
   FilterResponseResultType
 } from "./apiResponseTypes";
 

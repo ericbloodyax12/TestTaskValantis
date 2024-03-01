@@ -1,7 +1,9 @@
 import CustomStore from "devextreme/data/custom_store";
-import {productApi} from "../../../api/productApi";
-import {filterUniqueById} from "../../../api/apiHelpers/filterUniqueById";
-import {FilterPayloadType, FilterType, GetItemsResponseTypeResult} from "../../../api/apiResponseTypes";
+import {FilterPayloadType, FilterType, GetItemsResponseTypeResult} from "../api/apiResponseTypes";
+import {productApi} from "../api/productApi";
+import {filterUniqueById} from "../api/apiHelpers/filterUniqueById";
+
+
 
  export const loadObject =  {
    customStore : new CustomStore({
