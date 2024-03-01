@@ -3,10 +3,12 @@ import {
   ActionType,
   GetIdsPayloadParamType,
   GetIdsResponseType,
-  GetItemsResponseType, GetItemsResponseTypeResult,
-  GetItiemsPayLoadParamType
+  GetItemsResponseType,
+  GetItemsPayLoadParamType,
+  GetFilterResponseType,
+  GetFilterRequestParams,
+  FilterResponseResultType
 } from "./apiResponseTypes";
-
 
 class ProductApi {
   baseUrl = 'https://api.valantis.store:41000/';
@@ -14,7 +16,7 @@ class ProductApi {
   constructor() {
   }
 
-  async baseRequest<T, P>(action: ActionType, params: P): Promise<T> {
+  async baseRequest<ResponseType, P>(action: ActionType, params: P): Promise<ResponseType> {
     const actuallyParam = params ? {params: params} : {}
     const res = await fetch(this.baseUrl, {
       method: 'POST',
@@ -27,7 +29,7 @@ class ProductApi {
         ...actuallyParam
       })
     })
-    const data = await res.json() as T
+    const data = await res.json() as ResponseType
     return data
   }
 
@@ -38,17 +40,24 @@ class ProductApi {
     return idsResponseData
   }
 
-  async getItems(offsetParams: number): Promise<GetItemsResponseType> {
-    const ids = await this.getIds(offsetParams)
-    const payloadParams = {ids: ids.result}
-    const itemsResponseData = await this.baseRequest<GetItemsResponseType, GetItiemsPayLoadParamType>('get_items', payloadParams)
-    console.log('itemsResponseData', itemsResponseData)
-    return itemsResponseData
-  }
+  async getItems(offsetParams: number, filteredProductsIds?: FilterResponseResultType): Promise<GetItemsResponseType> {
 
-  // async getFilter(): Promise<any> {
-  //   const fieldsResponseData = await this.baseRequest('filter',)
-  // }
+    if (filteredProductsIds) {
+      const payloadParams = {ids: filteredProductsIds.result}
+      const itemsResponseData = await this.baseRequest<GetItemsResponseType, GetItemsPayLoadParamType>('get_items', payloadParams)
+      return itemsResponseData
+    } else {
+      const ids = await this.getIds(offsetParams)
+      const payloadParams = {ids: ids.result}
+      const itemsResponseData = await this.baseRequest<GetItemsResponseType, GetItemsPayLoadParamType>('get_items', payloadParams)
+      return itemsResponseData
+    }
+
+  }
+  async getFilter<P>(filterParams: P): Promise<FilterResponseResultType> {
+    const filterResponseData = await this.baseRequest<FilterResponseResultType, P>("filter", filterParams)
+    return filterResponseData
+  }
 
 }
 

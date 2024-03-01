@@ -1,5 +1,4 @@
-import {GetItemsResponseTypeResult} from "../apiResponseTypes";
-
+import {GetFilterResponseType, GetItemsResponseTypeResult} from "../apiResponseTypes";
 
 export function filterUniqueById (data:GetItemsResponseTypeResult[]) {
   const uniqueIds = new Set();
