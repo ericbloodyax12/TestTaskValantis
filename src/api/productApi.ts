@@ -27,6 +27,11 @@ class ProductApi {
         ...actuallyParam
       })
     })
+    if (!res.ok) {
+      if (res.status === 500) {
+        throw new Error('500 Internal Server Error. Пожалуйста попробуйте еще раз.');
+      }
+    }
     const data = await res.json() as ResponseType
     return data
   }
@@ -35,7 +40,7 @@ class ProductApi {
     const idsResponseData = await this.baseRequest<GetIdsResponseType, GetIdsPayloadParamType>(
         'get_ids', {"offset": offsetParams, "limit": 50}
     )
-    return idsResponseData
+    return idsResponseData;
   }
 
   async getItems(offsetParams: number, filteredProductsIds?: FilterResponseResultType): Promise<GetItemsResponseType> {
