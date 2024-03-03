@@ -15,6 +15,7 @@ class ProductApi {
   }
 
   async baseRequest<ResponseType, P>(action: ActionType, params: P): Promise<ResponseType> {
+
     const actuallyParam = params ? {params: params} : {}
     const res = await fetch(this.baseUrl, {
       method: 'POST',

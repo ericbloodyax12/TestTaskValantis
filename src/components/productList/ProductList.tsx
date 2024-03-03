@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Column, DataGrid, FilterRow, Pager, Paging} from "devextreme-react/data-grid";
-import {loadObject} from "../../state/loadStore";
+import {productStore} from "../../state/loadStore";
 import {UiHelper} from "./helpers/uiHelper";
 import {FilterType} from "../../api/apiResponseTypes";
 
@@ -10,8 +10,12 @@ export const ProductList = () => {
 
   return (
       <div>
-        <DataGrid dataSource={loadObject.customStore}
+        <DataGrid dataSource={productStore.customStore}
                   showBorders={true}
+                  onInitialized={(e) => {
+                    // @ts-ignore
+                    productStore.componentInstance = e.component
+                  }}
                   onOptionChanged={(e) => {
                     const optionName = e.fullName
                     const isFilterOperation = UiHelper.checkIsFilterOperation(optionName)
