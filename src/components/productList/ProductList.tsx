@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Column, DataGrid, FilterRow, Pager, Paging} from "devextreme-react/data-grid";
-import {productStore} from "../../state/loadStore";
+import {ProductStore, productStore} from "../../state/loadStore";
 import {UiHelper} from "./helpers/uiHelper";
 import {FilterType} from "../../api/apiResponseTypes";
 
@@ -10,11 +10,11 @@ export const ProductList = () => {
 
   return (
       <div>
-        <DataGrid dataSource={productStore.customStore}
+        <DataGrid dataSource={productStore.getСustomStore()}
                   showBorders={true}
                   onInitialized={(e) => {
-                    // @ts-ignore
-                    productStore.componentInstance = e.component
+
+                    ProductStore.componentInstance = e.component
                   }}
                   onOptionChanged={(e) => {
                     const optionName = e.fullName
@@ -23,7 +23,6 @@ export const ProductList = () => {
                       UiHelper.setCurrentFilter(e, setCurrentFiltering)
                     }
                   }}
-
                   remoteOperations={{
                     paging: true,
                     filtering: true,
@@ -40,7 +39,6 @@ export const ProductList = () => {
           <Column dataField={'product'} caption={'Продукт'}
                   allowFiltering={currentFiltering === undefined ? true : currentFiltering === 'product'}
                   allowSorting={false}/>
-          {/*//currentFilter == 'product'*/}
           <Column dataField={'price'} caption={'Цена'}
                   allowFiltering={currentFiltering === undefined ? true : currentFiltering === 'price'}
                   allowSorting={false}/>
