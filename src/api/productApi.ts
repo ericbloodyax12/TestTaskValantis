@@ -64,5 +64,4 @@ class ProductApi {
   }
 
 }
-
 export const productApi = new ProductApi();

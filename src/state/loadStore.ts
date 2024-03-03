@@ -1,16 +1,20 @@
 import CustomStore from "devextreme/data/custom_store";
-import {FilterPayloadType, FilterType, GetItemsResponseTypeResult} from "../api/apiResponseTypes";
+import {FilterPayloadType, FilterType, GetItemsResponseType, GetItemsResponseTypeResult} from "../api/apiResponseTypes";
 import {productApi} from "../api/productApi";
 import {filterUniqueById} from "../api/apiHelpers/filterUniqueById";
 import {inherits} from "util";
 import dxDataGrid from "devextreme/ui/data_grid";
 
 export class ProductStore {
-  static loadCount = 0
-  static componentInstance: dxDataGrid<any, any> | undefined = undefined
-  constructor() {
+  loadCount = 0
+  private _componentInstance: dxDataGrid<GetItemsResponseType, string> | undefined = undefined
+
+  setComponentInstance(componentInstance: dxDataGrid<GetItemsResponseType, string> | undefined) {
+    this._componentInstance = componentInstance
   }
-  getСustomStore() {
+
+  getCustomStore() {
+    const that = this
     return new CustomStore({
       key: 'id',
       loadMode: "processed",
@@ -31,16 +35,12 @@ export class ProductStore {
             uniqueItemsList = filterUniqueById(list.result)
           }
         } catch (e) {
-          if (ProductStore.loadCount > 2) {
-            console.log(e)
+          if (that.loadCount > 2) {
             return e
           }
-          ProductStore.loadCount++
-
-          console.log(ProductStore.componentInstance)
-
-
-          ProductStore.componentInstance?.refresh()
+          that.loadCount++
+          console.log(that._componentInstance)
+          that._componentInstance?.refresh()
         }
         return {data: uniqueItemsList, totalCount: totalCount}
       }
